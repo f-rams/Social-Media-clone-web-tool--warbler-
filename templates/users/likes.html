@@ -1,0 +1,43 @@
+{% extends 'users/detail.html' %} {% block user_details %}
+<div class="col-sm-9">
+  <div class="row">
+    {% for like in user.likes %}
+    <div class="col-md-6 mb-1">
+      <ul class="list-group no-hover" id="messages">
+        <li class="list-group-item">
+          <a href="{{ url_for('users_show', user_id=like.user.id) }}">
+            <img
+              src="{{ like.user.image_url }}"
+              alt=""
+              class="timeline-image"
+            />
+          </a>
+          <div class="message-area">
+            <div class="message-heading">
+              <a href="/users/{{ like.user.id }}">@{{ like.user.username }}</a>
+              {% if g.user %} {% if g.user.id == like.user.id %} {% elif
+              g.user.is_following(like.user) %}
+              <form action="/users/{{user.id}}/{{like.id}}" method="POST">
+                <button class="btn btn-primary">
+                  <i class="fa fa-thumbs-up"></i>
+                </button>
+              </form>
+              {% else %}
+              <form method="POST" action="/users/follow/{{ like.user.id }}">
+                <button class="btn btn-outline-primary btn-sm">Follow</button>
+              </form>
+              {% endif %} {% endif %}
+            </div>
+            <p class="single-message">{{ like.text }}</p>
+            <span class="text-muted"
+              >{{ like.timestamp.strftime('%d %B %Y') }}</span
+            >
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
