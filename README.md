@@ -24,9 +24,13 @@ Run the following commands from the capstone directory in this order:
 $ pip install -r requirements.txt
 ```
 
-After installing the requirements, open a python interactive shell and run the seed.py file to create and populate the database with pre-generated data.
+After installing the requirements, open a Python interactive shell and run the seed.py file to create and populate the database with pre-generated data. In this case, we used IPython.
 
 - Run the seed.py file:
+- 
+```shell
+$ %run seed.py
+```
 
 ## Description
 
