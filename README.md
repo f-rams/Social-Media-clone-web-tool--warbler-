@@ -1,4 +1,4 @@
-# Social Media clone - Warbler
+# Twitter clone - Warbler
 
 - [Social Media clone - Warbler](#social-media-clone---warbler)
   - [TeckStack](#teckstack)
