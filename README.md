@@ -9,10 +9,10 @@
 
 This aplications was developed with the support of the following tools:
 
-- Programming languges: JavaScript, [Python](https://www.python.org)
+- Programming languges: [JavaScript](https://www.javascript.com), [Python](https://www.python.org)
 - Database storage and management: [PostgreSQL](https://www.postgresql.org), [Postico](https://eggerapps.at/postico2/)
 - Frontend libraries: [Booststrap](https://getbootstrap.com), [jQuery](https://jquery.com),
-- Backend libraries: [Jinja](https://jinja.palletsprojects.com/en/3.1.x/)
+- Backend libraries: [Flaks](https://flask.palletsprojects.com/en/3.0.x/)
 
 ## Installation
 
@@ -34,4 +34,4 @@ $ %run seed.py
 
 ## Description
 
-A web tool that emulates social media boards (e.g. Twitter).
+A web tool that emulates Twitter.
