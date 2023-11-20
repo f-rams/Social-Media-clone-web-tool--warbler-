@@ -62,7 +62,7 @@ class User(db.Model):
     email = db.Column(
         db.Text,
         nullable=False,
-        unique=True,
+        unique=False,
     )
 
     username = db.Column(
