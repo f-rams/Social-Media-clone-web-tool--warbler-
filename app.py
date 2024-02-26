@@ -18,6 +18,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 300
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 app.config['SECRET_KEY'] = SECRET_KEY
