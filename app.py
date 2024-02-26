@@ -18,10 +18,17 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
-app.config['SQLALCHEMY_POOL_SIZE'] = 10
-app.config['SQLALCHEMY_MAX_OVERFLOW'] = 20
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 1800
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "pool_pre_ping": True,
+    "pool_size": 10,
+    "max_overflow": 20,
+    "pool_recycle": 120,
+    "connect_args": {
+        "keepalives": 1,
+        "keepalives_idle": 30,
+        "keepalives_interval": 10,
+        "keepalives_count": 5,
+    }}
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 app.config['SECRET_KEY'] = SECRET_KEY
@@ -42,7 +49,6 @@ def add_user_to_g():
 
     if CURR_USER_KEY in session:
         g.user = User.query.get(session[CURR_USER_KEY])
-        db.session.close()
 
     else:
         g.user = None
@@ -58,7 +64,6 @@ def do_logout():
     """Logout user."""
 
     if CURR_USER_KEY in session:
-        db.session.close()
         del session[CURR_USER_KEY]
 
 
@@ -86,7 +91,6 @@ def signup():
             )
             db.session.commit()
             do_login(user)
-            db.session.close()
             return redirect("/")
 
         except IntegrityError:
@@ -110,7 +114,6 @@ def login():
 
         if user:
             do_login(user)
-            db.session.close()
             flash(f"Hello, {user.username}!", "success")
             return redirect("/")
 
@@ -145,7 +148,6 @@ def list_users():
     else:
         users = User.query.filter(User.username.like(f"%{search}%")).all()
 
-    db.session.close()
     return render_template('users/index.html', users=users)
 
 
@@ -163,7 +165,6 @@ def users_show(user_id):
                 .order_by(Message.timestamp.desc())
                 .limit(100)
                 .all())
-    db.session.close()
     return render_template('users/show.html', user=user, messages=messages)
 
 
@@ -176,7 +177,6 @@ def show_following(user_id):
         return redirect("/")
 
     user = User.query.get_or_404(user_id)
-    db.session.close()
     return render_template('users/following.html', user=user)
 
 
@@ -189,7 +189,6 @@ def users_followers(user_id):
         return redirect("/")
 
     user = User.query.get_or_404(user_id)
-    db.session.close()
     return render_template('users/followers.html', user=user)
 
 
@@ -204,7 +203,6 @@ def add_follow(follow_id):
     followed_user = User.query.get_or_404(follow_id)
     g.user.following.append(followed_user)
     db.session.commit()
-    db.session.close()
 
     return redirect(f"/users/{g.user.id}/following")
 
@@ -220,7 +218,6 @@ def stop_following(follow_id):
     followed_user = User.query.get(follow_id)
     g.user.following.remove(followed_user)
     db.session.commit()
-    db.session.close()
 
     return redirect(f"/users/{g.user.id}/following")
 
@@ -260,7 +257,6 @@ def profile(id):
             else:
                 logged_user.location = form.location.data
             db.session.commit()
-            db.session.close()
             flash("Edit successful", "success")
             return redirect(f"/users/{logged_user.id}")
 
@@ -279,7 +275,6 @@ def delete_user():
 
     db.session.delete(g.user)
     db.session.commit()
-    db.session.close()
 
     return redirect("/signup")
 
@@ -304,7 +299,6 @@ def messages_add():
         msg = Message(text=form.text.data)
         g.user.messages.append(msg)
         db.session.commit()
-        db.session.close()
 
         return redirect(f"/users/{g.user.id}")
 
@@ -330,7 +324,6 @@ def messages_destroy(message_id):
     msg = Message.query.get(message_id)
     db.session.delete(msg)
     db.session.commit()
-    db.session.close()
 
     return redirect(f"/users/{g.user.id}")
 
@@ -399,12 +392,10 @@ def add_like(msg_id, user_id):
         like = Likes(user_id=user_id, message_id=msg_id)
         db.session.add(like)
         db.session.commit()
-        db.session.close()
         return redirect('/')
     else:
         db.session.delete(like)
         db.session.commit()
-        db.session.close()
         return redirect('/')
 
 
@@ -412,7 +403,6 @@ def add_like(msg_id, user_id):
 def user_likes(user_id):
     user = User.query.get(user_id)
     likes = [like.message_id for like in Likes.query.all()]
-    db.session.close()
     return render_template('/users/likes.html', user=user, likes=likes)
 
 
@@ -421,5 +411,4 @@ def add_like2(user_id, msg_id):
     like = Likes.query.filter(Likes.message_id == msg_id).first()
     db.session.delete(like)
     db.session.commit()
-    db.session.close()
     return redirect(f'/users/{user_id}/likes')
