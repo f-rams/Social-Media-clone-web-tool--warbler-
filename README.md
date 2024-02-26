@@ -1,11 +1,15 @@
 # Twitter clone - Warbler
 
 - [Social Media clone - Warbler](#social-media-clone---warbler)
-  - [TeckStack](#teckstack)
-  - [Installation](#installation)
   - [Description](#description)
+  - [Tech Stack](#tech-stack)
+  - [Installation](#installation)
 
-## TeckStack
+## Description
+
+A web tool that emulates Twitter.
+
+## Tech Stack
 
 This aplications was developed with the support of the following tools:
 
@@ -24,7 +28,7 @@ Run the following commands from the capstone directory in this order:
 $ pip install -r requirements.txt
 ```
 
-After installing the requirements, open a Python interactive shell and run the seed.py file to create and populate the database with pre-generated data. In this case, we used IPython.
+After installing the requirements, open a Python interactive shell and run the seed.py file to create and populate the database with pre-generated data.
 
 - Run the seed.py file:
   
@@ -32,6 +36,4 @@ After installing the requirements, open a Python interactive shell and run the s
 $ %run seed.py
 ```
 
-## Description
 
-A web tool that emulates Twitter.
