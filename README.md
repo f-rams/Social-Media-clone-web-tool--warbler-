@@ -2,7 +2,7 @@
 
 - [Social Media clone - Warbler](#social-media-clone---warbler)
   - [Description](#description)
-  - [Tech Stack](#teckstack)
+  - [Tech Stack](#tech-stack)
   - [Installation](#installation)
 
 ## Description
