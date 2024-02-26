@@ -1,11 +1,15 @@
 # Twitter clone - Warbler
 
 - [Social Media clone - Warbler](#social-media-clone---warbler)
-  - [TeckStack](#teckstack)
-  - [Installation](#installation)
   - [Description](#description)
+  - [Tech Stack](#teckstack)
+  - [Installation](#installation)
 
-## TeckStack
+## Description
+
+A web tool that emulates Twitter.
+
+## Tech Stack
 
 This aplications was developed with the support of the following tools:
 
@@ -32,6 +36,4 @@ After installing the requirements, open a Python interactive shell and run the s
 $ %run seed.py
 ```
 
-## Description
 
-A web tool that emulates Twitter.
