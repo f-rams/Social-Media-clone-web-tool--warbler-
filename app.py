@@ -79,14 +79,12 @@ def signup():
                 image_url=form.image_url.data or User.image_url.default.arg,
             )
             db.session.commit()
+            do_login(user)
+            return redirect("/")
 
         except IntegrityError:
             flash("Username already taken", 'danger')
             return render_template('users/signup.html', form=form)
-
-        do_login(user)
-
-        return redirect("/")
 
     else:
         return render_template('users/signup.html', form=form)
