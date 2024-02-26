@@ -83,6 +83,7 @@ def signup():
             return redirect("/")
 
         except IntegrityError:
+            db.session.rollback()
             flash("Username already taken", 'danger')
             return render_template('users/signup.html', form=form)
 
