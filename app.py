@@ -98,6 +98,7 @@ def login():
         if user:
             do_login(user)
             flash(f"Hello, {user.username}!", "success")
+            db.session.close()
             return redirect("/")
 
         flash("Invalid credentials.", 'danger')
