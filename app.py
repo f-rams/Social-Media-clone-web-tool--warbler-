@@ -125,6 +125,7 @@ def list_users():
     else:
         users = User.query.filter(User.username.like(f"%{search}%")).all()
 
+    db.session.close()
     return render_template('users/index.html', users=users)
 
 
