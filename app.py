@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.pool import NullPool
 
 from forms import UserAddForm, LoginForm, MessageForm, EditForm
 from models import db, connect_db, User, Message, Likes
@@ -18,21 +19,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-    "pool_pre_ping": True,
-    "pool_size": 10,
-    "max_overflow": 20,
-    "pool_recycle": 120,
-    "connect_args": {
-        "keepalives": 1,
-        "keepalives_idle": 30,
-        "keepalives_interval": 10,
-        "keepalives_count": 5,
-    }}
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "pool_pre_ping": True, "pool_recycle": 300, "poolclass": NullPool}
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 app.config['SECRET_KEY'] = SECRET_KEY
-# toolbar = DebugToolbarExtension(app)
 app.app_context().push()
 
 
