@@ -60,15 +60,6 @@ def do_logout():
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
-    """Handle user signup.
-
-    Create new user and add to DB. Redirect to home page.
-
-    If form not valid, present form.
-
-    If the there already is a user with that username: flash message
-    and re-present form.
-    """
 
     form = UserAddForm()
 
@@ -115,8 +106,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    """Handle logout of user."""
-    # IMPLEMENT THIS
+
     do_logout()
     flash('Logout succeeded')
     return redirect('/login')
@@ -127,10 +117,6 @@ def logout():
 
 @app.route('/users')
 def list_users():
-    """Page with listing of users.
-
-    Can take a 'q' param in querystring to search by that username.
-    """
 
     search = request.args.get('q')
 
@@ -144,12 +130,9 @@ def list_users():
 
 @app.route('/users/<int:user_id>')
 def users_show(user_id):
-    """Show user profile."""
 
     user = User.query.get_or_404(user_id)
 
-    # snagging messages in order from the database;
-    # user.messages won't be in order by default
     messages = (Message
                 .query
                 .filter(Message.user_id == user_id)
@@ -327,7 +310,6 @@ def messages_destroy(message_id):
 def homepage():
     """Show homepage:
 
-    - anon users: no messages
     - logged in: 100 most recent messages of followed_users
     """
 
@@ -346,31 +328,6 @@ def homepage():
     else:
         return render_template('home-anon.html')
 
-
-#  if g.user:
-#         messages = (Message
-#                     .query
-#                     .order_by(Message.timestamp.desc())
-#                     .limit(100)
-#                     .all())
-
-
-##############################################################################
-# Turn off all caching in Flask
-#   (useful for dev; in production, this kind of stuff is typically
-#   handled elsewhere)
-#
-# https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
-
-@app.after_request
-def add_header(req):
-    """Add non-caching headers on every request."""
-
-    req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    req.headers["Pragma"] = "no-cache"
-    req.headers["Expires"] = "0"
-    req.headers['Cache-Control'] = 'public, max-age=0'
-    return req
 
 # Like message route
 
