@@ -1,4 +1,4 @@
-# Twitter clone - Warbler
+# Social Media Clone (Twitter) - Warbler
 
 - [Social Media clone - Warbler](#social-media-clone---warbler)
   - [Description](#description)
@@ -7,16 +7,16 @@
 
 ## Description
 
-A web tool that emulates Twitter.
+Warbler is a web application that emulates the core functionalities of Twitter, allowing users to post and view messages, follow other users, and explore a timeline of content
 
 ## Tech Stack
 
-This aplications was developed with the support of the following tools:
+This application was developed with the support of the following tools:
 
-- Programming languges: [JavaScript](https://www.javascript.com), [Python](https://www.python.org)
+- Programming languages: [JavaScript](https://www.javascript.com), [Python](https://www.python.org)
 - Database storage and management: [PostgreSQL](https://www.postgresql.org), [Postico](https://eggerapps.at/postico2/)
 - Frontend libraries: [Booststrap](https://getbootstrap.com), [jQuery](https://jquery.com),
-- Backend libraries: [Flaks](https://flask.palletsprojects.com/en/3.0.x/)
+- Backend libraries: [Flask](https://flask.palletsprojects.com/en/3.0.x/)
 
 ## Installation
 
