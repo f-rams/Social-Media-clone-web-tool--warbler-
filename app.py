@@ -73,6 +73,7 @@ def signup():
             )
             db.session.commit()
             do_login(user)
+            db.session.close()
             return redirect("/")
 
         except IntegrityError:
