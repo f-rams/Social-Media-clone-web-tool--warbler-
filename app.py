@@ -110,6 +110,7 @@ def login():
 def logout():
 
     do_logout()
+    db.session.close()
     flash('Logout succeeded')
     return redirect('/login')
 
