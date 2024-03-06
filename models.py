@@ -149,6 +149,7 @@ class User(db.Model):
         )
 
         db.session.add(user)
+        db.session.close()
         return user
 
     @classmethod
@@ -167,6 +168,7 @@ class User(db.Model):
         if user:
             is_auth = bcrypt.check_password_hash(user.password, password)
             if is_auth:
+                db.session.close()
                 return user
 
         return False
