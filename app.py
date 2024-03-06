@@ -73,7 +73,6 @@ def signup():
             )
             db.session.commit()
             do_login(user)
-            db.session.close()
             return redirect("/")
 
         except IntegrityError:
@@ -326,7 +325,6 @@ def homepage():
                     .limit(100)
                     .all())
         likes = [like.message_id for like in Likes.query.all()]
-        db.session.close()
         return render_template('home.html', messages=messages, likes=likes)
 
     else:
