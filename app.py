@@ -277,6 +277,7 @@ def messages_add():
         msg = Message(text=form.text.data)
         g.user.messages.append(msg)
         db.session.commit()
+        db.session.close()
 
         return redirect(f"/users/{g.user.id}")
 
@@ -288,6 +289,7 @@ def messages_show(message_id):
     """Show a message."""
 
     msg = Message.query.get(message_id)
+    db.session.close()
     return render_template('messages/show.html', message=msg)
 
 
@@ -302,6 +304,7 @@ def messages_destroy(message_id):
     msg = Message.query.get(message_id)
     db.session.delete(msg)
     db.session.commit()
+    db.session.close()
 
     return redirect(f"/users/{g.user.id}")
 
@@ -326,10 +329,11 @@ def homepage():
                     .limit(100)
                     .all())
         likes = [like.message_id for like in Likes.query.all()]
-
+        db.session.close()
         return render_template('home.html', messages=messages, likes=likes)
 
     else:
+        db.session.close()
         return render_template('home-anon.html')
 
 
@@ -344,10 +348,12 @@ def add_like(msg_id, user_id):
         like = Likes(user_id=user_id, message_id=msg_id)
         db.session.add(like)
         db.session.commit()
+        db.session.close()
         return redirect('/')
     else:
         db.session.delete(like)
         db.session.commit()
+        db.session.close()
         return redirect('/')
 
 
@@ -355,6 +361,7 @@ def add_like(msg_id, user_id):
 def user_likes(user_id):
     user = User.query.get(user_id)
     likes = [like.message_id for like in Likes.query.all()]
+    db.session.close()
     return render_template('/users/likes.html', user=user, likes=likes)
 
 
@@ -363,4 +370,5 @@ def add_like2(user_id, msg_id):
     like = Likes.query.filter(Likes.message_id == msg_id).first()
     db.session.delete(like)
     db.session.commit()
+    db.session.close()
     return redirect(f'/users/{user_id}/likes')
