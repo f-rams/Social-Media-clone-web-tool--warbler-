@@ -330,7 +330,6 @@ def homepage():
         return render_template('home.html', messages=messages, likes=likes)
 
     else:
-        db.session.close()
         return render_template('home-anon.html')
 
 
