@@ -9,8 +9,10 @@ from models import db, connect_db, User, Message, Likes
 
 CURR_USER_KEY = "curr_user"
 
+
 DATABASE_URL = os.getenv('DATABASE_URL')
 SECRET_KEY = os.getenv('SECRET_KEY')
+
 
 app = Flask(__name__)
 
@@ -73,14 +75,26 @@ def signup():
             )
             db.session.commit()
             do_login(user)
+            db.session.close()
+            print('>>>>>>>>>>>>>>>>>>>>>>>>>')
+            print('This is the user:', user)
             return redirect("/")
 
-        except IntegrityError:
+        except IntegrityError as e:
             db.session.rollback()
-            flash("Username already taken", 'danger')
+            # Print the error message for debugging
+            print(f"IntegrityError: {e}")
+            flash("Username/Email already taken", 'danger')
+            return render_template('users/signup.html', form=form)
+        except Exception as e:
+            db.session.rollback()
+            # Print any other unexpected errors for debugging
+            print(f"Unexpected error: {e}")
+            flash("An unexpected error occurred. Please try again.", 'danger')
             return render_template('users/signup.html', form=form)
 
     else:
+        print('no logged!')
         return render_template('users/signup.html', form=form)
 
 
@@ -127,7 +141,8 @@ def list_users():
     else:
         users = User.query.filter(User.username.like(f"%{search}%")).all()
 
-    db.session.close()
+    # db.session.close()
+    print(users)
     return render_template('users/index.html', users=users)
 
 

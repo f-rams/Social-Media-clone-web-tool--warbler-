@@ -1,5 +1,3 @@
-"""SQLAlchemy models for Warbler."""
-
 from datetime import datetime
 
 from flask_bcrypt import Bcrypt
@@ -62,7 +60,7 @@ class User(db.Model):
     email = db.Column(
         db.Text,
         nullable=False,
-        unique=False,
+        unique=True,
     )
 
     username = db.Column(
@@ -94,25 +92,32 @@ class User(db.Model):
         nullable=False,
     )
 
-    messages = db.relationship('Message')
+    messages = db.relationship(
+        'Message',
+        back_populates='user',
+        overlaps="user"
+    )
 
     followers = db.relationship(
         "User",
         secondary="follows",
         primaryjoin=(Follows.user_being_followed_id == id),
-        secondaryjoin=(Follows.user_following_id == id)
+        secondaryjoin=(Follows.user_following_id == id),
+        overlaps="following"
     )
 
     following = db.relationship(
         "User",
         secondary="follows",
         primaryjoin=(Follows.user_following_id == id),
-        secondaryjoin=(Follows.user_being_followed_id == id)
+        secondaryjoin=(Follows.user_being_followed_id == id),
+        overlaps="followers"
     )
 
     likes = db.relationship(
         'Message',
-        secondary="likes"
+        secondary="likes",
+        back_populates='liked_by'
     )
 
     def __repr__(self):
@@ -121,16 +126,12 @@ class User(db.Model):
     def is_followed_by(self, other_user):
         """Is this user followed by `other_user`?"""
 
-        found_user_list = [
-            user for user in self.followers if user == other_user]
-        return len(found_user_list) == 1
+        return other_user in self.followers
 
     def is_following(self, other_user):
-        """Is this user following `other_use`?"""
+        """Is this user following `other_user`?"""
 
-        found_user_list = [
-            user for user in self.following if user == other_user]
-        return len(found_user_list) == 1
+        return other_user in self.following
 
     @classmethod
     def signup(cls, username, email, password, image_url):
@@ -149,7 +150,7 @@ class User(db.Model):
         )
 
         db.session.add(user)
-        db.session.close()
+
         return user
 
     @classmethod
@@ -168,7 +169,6 @@ class User(db.Model):
         if user:
             is_auth = bcrypt.check_password_hash(user.password, password)
             if is_auth:
-                db.session.close()
                 return user
 
         return False
@@ -192,7 +192,7 @@ class Message(db.Model):
     timestamp = db.Column(
         db.DateTime,
         nullable=False,
-        default=datetime.utcnow(),
+        default=datetime.utcnow,
     )
 
     user_id = db.Column(
@@ -201,7 +201,17 @@ class Message(db.Model):
         nullable=False,
     )
 
-    user = db.relationship('User')
+    user = db.relationship(
+        'User',
+        back_populates='messages',
+        overlaps="messages"
+    )
+
+    liked_by = db.relationship(
+        'User',
+        secondary="likes",
+        back_populates='likes'
+    )
 
 
 def connect_db(app):
