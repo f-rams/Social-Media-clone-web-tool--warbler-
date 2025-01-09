@@ -76,8 +76,7 @@ def signup():
             db.session.commit()
             do_login(user)
             db.session.close()
-            print('>>>>>>>>>>>>>>>>>>>>>>>>>')
-            print('This is the user:', user)
+
             return redirect("/")
 
         except IntegrityError as e:
@@ -94,7 +93,7 @@ def signup():
             return render_template('users/signup.html', form=form)
 
     else:
-        print('no logged!')
+
         return render_template('users/signup.html', form=form)
 
 
@@ -141,8 +140,6 @@ def list_users():
     else:
         users = User.query.filter(User.username.like(f"%{search}%")).all()
 
-    # db.session.close()
-    print(users)
     return render_template('users/index.html', users=users)
 
 
